@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { useLoaderData, useParams } from "react-router-dom";
+import { Link, useLoaderData, useParams } from "react-router-dom";
 
 const PhoneDetails = () => {
-    console.log("problem");
+    // console.log("problem");
     const [phone, setPhone] = useState({});
     // const [phones, setPhones] = useState({});
    const phones = useLoaderData();
     
     const {id} = useParams();
-    console.log(id);
-    console.log(phones);
+    // console.log(id);
+    // console.log(phones);
     useEffect(() => {
         const specificPhone = phones?.find(phone => phone.id === id);
         setPhone(specificPhone);
@@ -17,6 +17,27 @@ const PhoneDetails = () => {
 
 
     const { image, phone_name, brand_name, price, rating } = phone;
+
+    const handleAddToFavourites =  phone => {
+        // console.log(phone);
+        const temp = [];
+        const favourite = JSON.parse(localStorage.getItem(`favourites`));
+        if(favourite){
+            const exists = favourite?.find(phon => phon.id === id);
+            if(exists){
+                alert(`No duplicates allowed`)
+            }else{
+                console.log(exists)
+                temp.push(...favourite, phone);
+                console.log(temp);
+                localStorage.setItem(`favourites`, JSON.stringify(temp));
+                alert(`Successfully added`)
+            }
+        }else{
+            temp.push(phone);
+            localStorage.setItem(`favourites`, JSON.stringify(temp));
+        }
+    }
     return (
         <div className="flex justify-center items-center h-screen">
             <div className="relative flex w-full max-w-[48rem] flex-row rounded-xl bg-slate-900 bg-clip-border text-gray-500 shadow-md">
@@ -40,8 +61,8 @@ const PhoneDetails = () => {
                         selling licenses. Yet its own business model disruption is only part of
                         the story
                     </p> */}
-                    <a className="inline-block" href="#">
-                        <button
+                    <Link className="inline-block">
+                        <button onClick={() => handleAddToFavourites(phone)}
                             className="flex select-none items-center gap-2 rounded-lg py-3 px-0 text-center align-middle font-sans text-xs font-bold uppercase text-blue-500 transition-all hover:bg-pink-500/10 active:bg-pink-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                             type="button"
                         >Add to favourites
@@ -61,7 +82,7 @@ const PhoneDetails = () => {
                                 ></path>
                             </svg>
                         </button>
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>

@@ -8,7 +8,7 @@ const Home = () => {
     return (
         <>
             <Banner></Banner>
-            <Phones phones={phones}></Phones>
+            <Phones title={`All Categories Phone`} phones={phones}></Phones>
         </>
     );
 };
